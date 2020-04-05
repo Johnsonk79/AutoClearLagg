@@ -76,7 +76,6 @@ class AutoClearLagg extends PluginBase{
         }
         $messages = $config["messages"] ?? [];
         $this->messages = [
-            self::LANG_TIME_LEFT => $messages[self::LANG_TIME_LEFT] ?? "§cEntities will clear in {SECONDS} seconds",
             self::LANG_ENTITIES_CLEARED => $messages[self::LANG_ENTITIES_CLEARED] ?? "§cCleared a total of {COUNT} entities"
         ];
 
@@ -86,7 +85,6 @@ class AutoClearLagg extends PluginBase{
 
             return;
         }
-        $this->broadcastTimes = $config["times"] ?? [60, 30, 15, 10, 5, 4, 3, 2, 1];
 
         $this->getScheduler()->scheduleRepeatingTask(new ClosureTask(function($_) : void{
             if(--$this->seconds === 0){
@@ -107,8 +105,6 @@ class AutoClearLagg extends PluginBase{
                 $this->getServer()->broadcastMessage(str_replace("{COUNT}", $entitiesCleared, $this->messages[self::LANG_ENTITIES_CLEARED]));
 
                 $this->seconds = $this->interval;
-            }else if(in_array($this->seconds, $this->broadcastTimes)){
-                $this->getServer()->broadcastMessage(str_replace("{SECONDS}", $this->seconds, $this->messages[self::LANG_TIME_LEFT]));
             }
         }), 20);
     }
